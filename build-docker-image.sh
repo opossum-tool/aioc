@@ -9,4 +9,4 @@ git submodule init
 git submodule update --remote
 
 docker build oss-review-toolkit --tag ort/with_opossum --network=host
-docker build . --tag opossum/aioc --network=host
+docker build . -f aioc/Dockerfile --tag opossum/aioc --network=host

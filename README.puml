@@ -16,6 +16,10 @@ partition ScanCode #eeeeee {
     "Source Code" -->[ScanCode Scan] "ScanCode Result"
 }
 
+partition "OWASP\nDependency-Check" #eeeeee {
+    "Source Code" -->[Dependency-Check] "Dependency-Check Result"
+}
+
 partition SCANOSS #eeeeee {
     "Source Code" --->[SCANOSS Scan] "SCANOSS Result"
     partition convertSCA.sh #dddddd {
@@ -31,6 +35,7 @@ partition opossum.lib.hs #eeeeee {
     "Opossum Input\nfrom ORT" --> "Merged\nOpossum Input"
     "ScanCode Result" --> "Merged\nOpossum Input"
     "Opossum Input\nfrom SCANOSS" --> "Merged\nOpossum Input"
+    "Dependency-Check Result" ..>[tbd.] "Merged\nOpossum Input"
 }
 
 partition SCANOSS #eeeeee {

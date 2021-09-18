@@ -22,17 +22,28 @@ RUN set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         libcurl4-openssl-dev \
-        jq \
+        jq uuid-runtime \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && curl -L "https://github.com/scanoss/scanner.c/releases/download/v${SCANOSS_VERSION}/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb" --output "/tmp/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb" \
     && dpkg -i "/tmp/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb" \
     && rm "/tmp/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb"
-COPY convertSCA.sh /usr/local/bin/
+COPY aioc/convertSCA.sh /usr/local/bin/
+
+ARG DEPENDENCY_CHECK_VERSION=6.2.2
+RUN set -x \
+    # install owasp dependency-check
+    && cd /opt \
+    && curl -ksSL -o /opt/dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v${DEPENDENCY_CHECK_VERSION}/dependency-check-${DEPENDENCY_CHECK_VERSION}-release.zip \
+    && unzip /opt/dependency-check.zip \
+    && rm /opt/dependency-check.zip \
+    && ln -s /opt/dependency-check/bin/dependency-check.sh /usr/local/bin/dependency-check.sh \
+    && dependency-check.sh --data /dependency-check-data --updateonly \
+    && find /dependency-check-data -type f -exec chmod 666 {} \; \
+    && find /dependency-check-data -type d -exec chmod 777 {} \;
 
 RUN mkdir -p /output
 WORKDIR /input
 
-COPY aioc.entrypoint.sh /
+COPY aioc/entrypoint.sh /
 ENTRYPOINT /aioc.entrypoint.sh
-CMD ["/input", "/output"]

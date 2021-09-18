@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if [[ "$1" == "--build" ]]; then
+    shift
+    "$(dirname "$0")"/build-docker-image.sh
+fi
+
 input="$(readlink -f "$1")"
 output="${input}_aioc"
 mkdir -p "$output"

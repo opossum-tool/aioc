@@ -63,6 +63,23 @@ runSCANOSS() (
     convertSCA.sh "$scanossFile" "$baseOpossum"
 )
 
+runOwaspDependencyCheck() (
+    local input="$(readlink -f "$1")"
+    local output="$(readlink -f "$2")"
+    local outputfile="$output/dependency-check-report.json"
+    cd "$input"
+    dependency-check.sh \
+     --format JSON \
+     --data /dependency-check-data \
+     --log "$output/log" \
+     --out "$output" \
+     --scan "."
+
+    local tmpfile="$(mktemp)"
+    jq . "$outputfile" | sed 's%"'"$input"'/%"%g' > "$tmpfile"
+    mv "$tmpfile" "$outputfile"
+)
+
 main() {
     local input="$1"
     local output="$2"
@@ -73,14 +90,16 @@ main() {
         runExtractcode "$inputExtracted"
     fi
 
-    runScancode "$inputExtracted" "$output/scancode/scancode.json"
-    runORT "$inputExtracted" "$output/ort"
-    runSCANOSS "$inputExtracted" "$output/SCANOSS"
+    [[ -f "$output/owaspDependencyCheck/dependency-check-report.json" ]] || runOwaspDependencyCheck "$inputExtracted" "$output/owaspDependencyCheck"
+    [[ -f "$output/scancode/scancode.json" ]] || runScancode "$inputExtracted" "$output/scancode/scancode.json"
+    [[ -f "$output/ort/opossum.input.json.gz" ]] || runORT "$inputExtracted" "$output/ort"
+    [[ -f "$output/SCANOSS/scanoss.json.opossum.json" ]] || runSCANOSS "$inputExtracted" "$output/SCANOSS"
 
     opossum.lib.hs \
         "$output/ort/opossum.input.json.gz" \
         --scancode "$output/scancode/scancode.json" \
         "$output/SCANOSS/scanoss.json.opossum.json" \
+        --dependency-check "$output/owaspDependencyCheck/dependency-check-report.json" \
         > "$output/merged-opossum.input.json"
 
     gzip "$output/merged-opossum.input.json"
@@ -88,4 +107,4 @@ main() {
 
 [[ -f ~/.ssh/id_rsa ]] || ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
 
-main "$1" "$2"
+main "${1:-/input}" "${2:-/output}"
