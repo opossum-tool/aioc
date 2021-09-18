@@ -9,6 +9,10 @@ RUN set -x \
 
 FROM ort/with_opossum:latest
 
+RUN set -x \
+    && ln -s /opt/ort/bin/ort /usr/local/bin/ort \
+    && ln -s /opt/ort/bin/orth /usr/local/bin/orth
+
 COPY --from=yacp /workdir/out /opt/opossum.lib.hs
 RUN set -x \
     && ln -s /opt/opossum.lib.hs/opossum-lib-exe /usr/local/bin/opossum.lib.hs
@@ -31,3 +35,4 @@ WORKDIR /input
 
 COPY aioc.entrypoint.sh /
 ENTRYPOINT /aioc.entrypoint.sh
+CMD ["/input", "/output"]

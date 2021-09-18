@@ -6,4 +6,4 @@ output="${input}_aioc"
 mkdir -p "$output"
 trap "sudo chown '$(id -u):$(id -g)' -R '$output'" EXIT
 
-docker run -v "$input":/input -v "$output":/output opossum/aioc
+docker run -v "$input":/input:ro -v "$output":/output opossum/aioc

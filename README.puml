@@ -1,0 +1,42 @@
+@startuml
+
+!theme spacelab
+skinparam ArrowFontColor #000000
+
+(*) -->[Extractcode] "Source Code"
+
+partition "OSS Review Toolkit\n(fork)" #eeeeee {
+    "Source Code" -->[ORT analyze] "Analyzer Result"
+    "Analyzer Result" -->[ORT scan] "Scanner Result"
+    "Analyzer Result" ...>[ORT report] "Opossum Input\nfrom ORT"
+    "Scanner Result" -->[ORT report] "Opossum Input\nfrom ORT"
+}
+
+partition ScanCode #eeeeee {
+    "Source Code" -->[ScanCode Scan] "ScanCode Result"
+}
+
+partition SCANOSS #eeeeee {
+    "Source Code" --->[SCANOSS Scan] "SCANOSS Result"
+    partition convertSCA.sh #dddddd {
+        "SCANOSS Result" -->[Convert] "Opossum Input\nfrom SCANOSS"
+    }
+}
+
+partition opossum.lib.hs #eeeeee {
+    "Source Code" ---> "Opossum Input\nfrom Filetree"
+
+    "ScanCode Result" ..> "Opossum Input\nfrom ScanCode"
+    "Opossum Input\nfrom ScanCode" ..> "Merged\nOpossum Input"
+    "Opossum Input\nfrom ORT" --> "Merged\nOpossum Input"
+    "ScanCode Result" --> "Merged\nOpossum Input"
+    "Opossum Input\nfrom SCANOSS" --> "Merged\nOpossum Input"
+}
+
+partition SCANOSS #eeeeee {
+    "Opossum Input\nfrom Filetree" --> "Opossum Input\nfrom SCANOSS"
+}
+
+"Merged\nOpossum Input" -->[gzip] (*)
+
+@enduml

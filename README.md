@@ -2,6 +2,10 @@
 
 ... needs a better name
 
+## What it does
+
+![README.png](./README.png)
+
 ## How to run:
 
 Build the docker image (once):
