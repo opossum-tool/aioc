@@ -13,11 +13,11 @@ partition "OSS Review Toolkit\n(fork)" #eeeeee {
 }
 
 partition ScanCode #eeeeee {
-    "Source Code" -->[ScanCode Scan] "ScanCode Result"
+    "Source Code" --->[ScanCode Scan] "ScanCode Result"
 }
 
 partition "OWASP\nDependency-Check" #eeeeee {
-    "Source Code" -->[Dependency-Check] "Dependency-Check Result"
+    "Source Code" --->[Dependency-Check] "Dependency-Check Result"
 }
 
 partition SCANOSS #eeeeee {
@@ -30,12 +30,12 @@ partition SCANOSS #eeeeee {
 partition opossum.lib.hs #eeeeee {
     "Source Code" ---> "Opossum Input\nfrom Filetree"
 
-    "ScanCode Result" ..> "Opossum Input\nfrom ScanCode"
-    "Opossum Input\nfrom ScanCode" ..> "Merged\nOpossum Input"
+    ' "ScanCode Result" ..> "Opossum Input\nfrom ScanCode"
+    ' "Opossum Input\nfrom ScanCode" ..> "Merged\nOpossum Input"
     "Opossum Input\nfrom ORT" --> "Merged\nOpossum Input"
     "ScanCode Result" --> "Merged\nOpossum Input"
     "Opossum Input\nfrom SCANOSS" --> "Merged\nOpossum Input"
-    "Dependency-Check Result" ..>[tbd.] "Merged\nOpossum Input"
+    "Dependency-Check Result" --> "Merged\nOpossum Input"
 }
 
 partition SCANOSS #eeeeee {

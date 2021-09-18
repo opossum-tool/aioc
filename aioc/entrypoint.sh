@@ -18,26 +18,30 @@ runScancode() {
         "$input" \
         --license-text --license-text-diagnostics \
         --json "$output" \
-        --strip-root || [ -f "$output" ]
+        --strip-root || [[ -f "$output" ]]
 }
 
 runORT() {
     local input="$1"
     local output="$2"
 
-    local analyzerResult="$output/analyzer-result.yml"
-    ort --force-overwrite --performance \
-        -P ort.analyzer.allowDynamicVersions=true analyze --output-formats YAML \
-        -i "$input" \
-        -o "$output" || [ -f "$analyzerResult" ]
-
     local scanResult="$output/scan-result.yml"
-    ort --force-overwrite --performance \
-        scan --output-formats YAML -s "Scancode" \
-        -i "$analyzerResult" \
-        -o "$output" || true
+    if [[ ! -f "$scanResult" ]]; then
+        local analyzerResult="$output/analyzer-result.yml"
+        if [[ ! -f "$analyzerResult" ]]; then
+            ort --force-overwrite --performance \
+                -P ort.analyzer.allowDynamicVersions=true analyze --output-formats YAML \
+                -i "$input" \
+                -o "$output" || [[ -f "$analyzerResult" ]]
+        fi
 
-    if [ -f "$scanResult" ]; then
+        ort --force-overwrite --performance \
+            scan --output-formats YAML -s "Scancode" \
+            -i "$analyzerResult" \
+            -o "$output" || true
+    fi
+
+    if [[ -f "$scanResult" ]]; then
         ort --force-overwrite --performance \
             report -f Opossum \
             -i "$scanResult" \
@@ -90,10 +94,10 @@ main() {
         runExtractcode "$inputExtracted"
     fi
 
-    [[ -f "$output/owaspDependencyCheck/dependency-check-report.json" ]] || runOwaspDependencyCheck "$inputExtracted" "$output/owaspDependencyCheck"
     [[ -f "$output/scancode/scancode.json" ]] || runScancode "$inputExtracted" "$output/scancode/scancode.json"
     [[ -f "$output/ort/opossum.input.json.gz" ]] || runORT "$inputExtracted" "$output/ort"
     [[ -f "$output/SCANOSS/scanoss.json.opossum.json" ]] || runSCANOSS "$inputExtracted" "$output/SCANOSS"
+    [[ -f "$output/owaspDependencyCheck/dependency-check-report.json" ]] || runOwaspDependencyCheck "$inputExtracted" "$output/owaspDependencyCheck"
 
     opossum.lib.hs \
         "$output/ort/opossum.input.json.gz" \
@@ -102,7 +106,7 @@ main() {
         --dependency-check "$output/owaspDependencyCheck/dependency-check-report.json" \
         > "$output/merged-opossum.input.json"
 
-    gzip "$output/merged-opossum.input.json"
+    gzip -f "$output/merged-opossum.input.json"
 }
 
 [[ -f ~/.ssh/id_rsa ]] || ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""

@@ -7,7 +7,7 @@ if [[ "$1" == "--build" ]]; then
 fi
 
 input="$(readlink -f "$1")"
-output="${input}_aioc"
+output="$(readlink -f "${2:-${input}_aioc}")"
 mkdir -p "$output"
 trap "sudo chown '$(id -u):$(id -g)' -R '$output'" EXIT
 

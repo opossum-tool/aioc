@@ -1,5 +1,5 @@
 # -*- mode: Dockerfile;-*-
-FROM fpco/stack-build:latest as yacp
+FROM fpco/stack-build:latest as opossum-lib-hs
 
 WORKDIR /workdir
 COPY opossum.lib.hs .
@@ -12,10 +12,6 @@ FROM ort/with_opossum:latest
 RUN set -x \
     && ln -s /opt/ort/bin/ort /usr/local/bin/ort \
     && ln -s /opt/ort/bin/orth /usr/local/bin/orth
-
-COPY --from=yacp /workdir/out /opt/opossum.lib.hs
-RUN set -x \
-    && ln -s /opt/opossum.lib.hs/opossum-lib-exe /usr/local/bin/opossum.lib.hs
 
 ARG SCANOSS_VERSION=1.3.4
 RUN set -x \
@@ -42,8 +38,12 @@ RUN set -x \
     && find /dependency-check-data -type f -exec chmod 666 {} \; \
     && find /dependency-check-data -type d -exec chmod 777 {} \;
 
+COPY --from=opossum-lib-hs /workdir/out /opt/opossum.lib.hs
+RUN set -x \
+    && ln -s /opt/opossum.lib.hs/opossum-lib-exe /usr/local/bin/opossum.lib.hs
+
 RUN mkdir -p /output
 WORKDIR /input
 
 COPY aioc/entrypoint.sh /
-ENTRYPOINT /aioc.entrypoint.sh
+ENTRYPOINT /entrypoint.sh
