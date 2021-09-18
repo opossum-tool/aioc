@@ -1,0 +1,5 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: README.png
+Copyright: TNG Technology Consulting GmbH <https://www.tngtech.com>
+License: Apache-2.0

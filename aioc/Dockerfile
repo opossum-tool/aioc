@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: TNG Technology Consulting GmbH <https://www.tngtech.com>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # -*- mode: Dockerfile;-*-
 FROM fpco/stack-build:latest as opossum-lib-hs
 
