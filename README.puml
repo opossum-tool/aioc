@@ -4,6 +4,8 @@
 
 @startuml
 
+left to right direction
+
 !theme spacelab
 skinparam ArrowFontColor #888888
 
@@ -22,7 +24,7 @@ partition ScanCode #eeeeee {
 }
 
 partition "OWASP\nDependency-Check" #eeeeee {
-    "Source Code" --->[Dependency-Check] "Dependency-Check Result"
+    "Source Code" -->[Dependency-Check] "Dependency-Check Result"
 }
 
 partition SCANOSS #eeeeee {
@@ -39,7 +41,7 @@ partition opossum.lib.hs #eeeeee {
     "Opossum Input\nfrom ORT" --> "Merged\nOpossum Input"
     "ScanCode Result" ---> "Merged\nOpossum Input"
     "Opossum Input\nfrom SCANOSS" --> "Merged\nOpossum Input"
-    "Dependency-Check Result" --> "Merged\nOpossum Input"
+    "Dependency-Check Result" ---> "Merged\nOpossum Input"
 }
 
 "Merged\nOpossum Input" -->[gzip] (*)
