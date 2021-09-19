@@ -5,11 +5,10 @@
 @startuml
 
 !theme spacelab
-skinparam ArrowFontColor #000000
+skinparam ArrowFontColor #888888
 
 (*) -->[Extractcode] "Source Code"
 "Source Code" -->[via opossum.lib.hs] "Opossum Input\nfrom Filetree"
-
 
 partition "OSS Review Toolkit\n(fork)" #eeeeee {
     "Source Code" -->[ORT analyze] "Analyzer Result"
