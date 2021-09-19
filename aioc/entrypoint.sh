@@ -78,11 +78,11 @@ runOwaspDependencyCheck() (
     local outputfile="$output/dependency-check-report.json"
     cd "$input"
     dependency-check.sh \
-     --format JSON \
-     --data /dependency-check-data \
-     --log "$output/log" \
-     --out "$output" \
-     --scan "."
+        --format JSON \
+        --data /dependency-check-data \
+        --log "$output/log" \
+        --out "$output" \
+        --scan "."
 
     local tmpfile="$(mktemp)"
     jq . "$outputfile" | sed 's%"'"$input"'/%"%g' > "$tmpfile"
