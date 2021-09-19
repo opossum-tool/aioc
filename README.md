@@ -5,8 +5,12 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 # aioc - all in one container
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/opossum-tool/opossumUI/blob/main/LICENSES/Apache-2.0.txt)
+[![REUSE status](https://api.reuse.software/badge/git.fsfe.org/reuse/api)](https://api.reuse.software/info/git.fsfe.org/reuse/api)
 
 ... needs a better name
+
+* **State:** demonstrator / not production ready
 
 ## What it does
 
