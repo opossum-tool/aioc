@@ -63,6 +63,7 @@ migrateSCAtoOPOSSUM() {
                   cat <<EOF >> $externalAttributions
   "${uuid}": {
     "comment": "$(echo "$value" | jq -r '.url')\\n\\n${comment}",
+    "url": "$(echo "$value" | jq -r '.url')",
     "packageName": "$(echo "$value" | jq -r '.vendor')/$(echo "$value" | jq -r '.component')",
     "packageVersion": "$(echo "$value" | jq -r '.version')",
     "licenseName": "${licenses}",
@@ -70,7 +71,7 @@ migrateSCAtoOPOSSUM() {
     "copyright": "${copyrights}",
     "source": {
       "documentConfidence": 0,
-      "name": "SCANOSS"
+      "name": "SCANOSS-$(echo "$value" | jq -r '.id')"
     }
   },
 EOF
