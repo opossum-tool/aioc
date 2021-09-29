@@ -9,3 +9,4 @@
 [submodule "opossum.lib.hs"]
 	path = opossum.lib.hs
 	url = git@github.com:opossum-tool/opossum.lib.hs
+	branch = main
