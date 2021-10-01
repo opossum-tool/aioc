@@ -66,10 +66,6 @@ runSCANOSS() (
     local scanossFile="$scanossDir/scanoss.json"
     cd "$input"
     scanner -o"$scanossFile" .
-
-    local baseOpossum="$scanossDir/opossum-from-filetree.json"
-    opossum.lib.hs "$input" > "$baseOpossum"
-    convertSCA.sh "$scanossFile" "$baseOpossum"
 )
 
 runOwaspDependencyCheck() (
@@ -101,13 +97,13 @@ main() {
 
     [[ -f "$output/scancode/scancode.json" ]] || runScancode "$inputExtracted" "$output/scancode/scancode.json"
     [[ -f "$output/ort/opossum.input.json.gz" ]] || runORT "$inputExtracted" "$output/ort"
-    [[ -f "$output/SCANOSS/scanoss.json.opossum.json" ]] || runSCANOSS "$inputExtracted" "$output/SCANOSS"
+    [[ -f "$output/SCANOSS/scanoss.json" ]] || runSCANOSS "$inputExtracted" "$output/SCANOSS"
     [[ -f "$output/owaspDependencyCheck/dependency-check-report.json" ]] || runOwaspDependencyCheck "$inputExtracted" "$output/owaspDependencyCheck"
 
     opossum.lib.hs \
         "$output/ort/opossum.input.json.gz" \
         --scancode "$output/scancode/scancode.json" \
-        "$output/SCANOSS/scanoss.json.opossum.json" \
+        --scanoss "$output/SCANOSS/scanoss.json" \
         --dependency-check "$output/owaspDependencyCheck/dependency-check-report.json" \
         > "$output/merged-opossum.input.json"
 

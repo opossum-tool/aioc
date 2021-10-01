@@ -28,7 +28,6 @@ RUN set -x \
     && curl -L "https://github.com/scanoss/scanner.c/releases/download/v${SCANOSS_VERSION}/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb" --output "/tmp/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb" \
     && dpkg -i "/tmp/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb" \
     && rm "/tmp/scanoss-scanner-${SCANOSS_VERSION}-amd64.deb"
-COPY aioc/convertSCA.sh /usr/local/bin/
 
 ARG DEPENDENCY_CHECK_VERSION=6.2.2
 RUN set -x \
