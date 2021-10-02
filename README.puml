@@ -10,7 +10,6 @@ left to right direction
 skinparam ArrowFontColor #888888
 
 (*) -->[Extractcode] "Source Code"
-"Source Code" -->[via opossum.lib.hs] "Opossum Input\nfrom Filetree"
 
 partition "OSS Review Toolkit\n(fork)" #eeeeee {
     "Source Code" -->[ORT analyze] "Analyzer Result"
@@ -29,10 +28,6 @@ partition "OWASP\nDependency-Check" #eeeeee {
 
 partition SCANOSS #eeeeee {
     "Source Code" --->[SCANOSS Scan] "SCANOSS Result"
-    partition convertSCA.sh #dddddd {
-        "Opossum Input\nfrom Filetree" --> "Opossum Input\nfrom SCANOSS"
-        "SCANOSS Result" -->[Convert] "Opossum Input\nfrom SCANOSS"
-    }
 }
 
 partition opossum.lib.hs #eeeeee {
@@ -40,7 +35,7 @@ partition opossum.lib.hs #eeeeee {
     ' "Opossum Input\nfrom ScanCode" ..> "Merged\nOpossum Input"
     "Opossum Input\nfrom ORT" --> "Merged\nOpossum Input"
     "ScanCode Result" ---> "Merged\nOpossum Input"
-    "Opossum Input\nfrom SCANOSS" --> "Merged\nOpossum Input"
+    "SCANOSS Result" --> "Merged\nOpossum Input"
     "Dependency-Check Result" ---> "Merged\nOpossum Input"
 }
 
