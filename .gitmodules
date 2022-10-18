@@ -5,7 +5,7 @@
 [submodule "oss-review-toolkit"]
 	path = oss-review-toolkit
 	url = https://github.com/oss-review-toolkit/ort
-	branch = master
+	branch = main
 [submodule "opossum.lib.hs"]
 	path = opossum.lib.hs
 	url = git@github.com:opossum-tool/opossum.lib.hs
